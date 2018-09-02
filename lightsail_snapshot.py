@@ -17,7 +17,7 @@ def CreateSnapshot(client,INSTANCE_NAME):
             instanceSnapshotName=new_snapshot_name,
             instanceName=INSTANCE_NAME,
     )
-    print(f"{snapshot_filename} is created.")
+    print(f"{new_snapshot_name} is created.")
 
 def DeleteSnapshot(client,INSTANCE_NAME):
     all_snapshots_list_responce = client.get_instance_snapshots()
