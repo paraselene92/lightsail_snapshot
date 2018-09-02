@@ -9,6 +9,6 @@
 * ランタイムは python3.6 にしてください。
 
 ## これからやること
-* DecideDeleteSnapshot(とそれに掛かる変数を)のクソさを直す
+* DecideDeleteSnapshot(とそれに掛かる変数)のクソさを直す
 * ここを英語で書く
 * コメントアウトを消してGistあたりに書いておく
