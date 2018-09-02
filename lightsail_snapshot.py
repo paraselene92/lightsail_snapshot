@@ -11,10 +11,10 @@ def GetSnapshotName():
     return filename
 
 def CreateSnapshot(client,INSTANCE_NAME):
-    snapshot_filename = GetSnapshotName()
+    new_snapshot_name = GetSnapshotName()
 
     client.create_instance_snapshot(
-            instanceSnapshotName=snapshot_filename,
+            instanceSnapshotName=new_snapshot_name,
             instanceName=INSTANCE_NAME,
     )
     print(f"{snapshot_filename} is created.")
@@ -24,7 +24,7 @@ def DeleteSnapshot(client,INSTANCE_NAME):
     filterd_snapshots_list = filter(lambda x: x['fromInstanceName'] == INSTANCE_NAME, all_snapshots_list_responce['instanceSnapshots'])
     sorted_list = sorted(filterd_snapshots_list, key=lambda x:x['createdAt'])
 
-    if len(sorted_list) > 1:
+    if len(sorted_list) >= GENERATIONS:
         old_snapshot = sorted_list[0]
         old_snapshot_name = old_snapshot['name']
         client.delete_instance_snapshot(
@@ -36,12 +36,8 @@ def DeleteSnapshot(client,INSTANCE_NAME):
 
 def lambda_handler(event, context):
     client = boto3.client('lightsail')
-    instances_number = len(client.get_instance_snapshots()['instanceSnapshots'])
-    if instances_number < GENERATIONS:
-        CreateSnapshot(client,INSTANCE_NAME)
-    else:
-        DeleteSnapshot(client,INSTANCE_NAME)
-        CreateSnapshot(client,INSTANCE_NAME)
+    CreateSnapshot(client,INSTANCE_NAME)
+    DeleteSnapshot(client,INSTANCE_NAME)
 
 #if __name__ == "__main__":
 #    main()
